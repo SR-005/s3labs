@@ -98,8 +98,8 @@ struct Node* Addpoly(struct Node* head1, struct Node* head2)
     return temp->link;
 }
 
- int main()
- {
+int main()
+{
     printf("ENTER THE FIRST POLYNOMIAL:\n");
     struct Node* head1=polynomial();
     printf("FIRST POLYNOMIAL:\n");
@@ -112,5 +112,4 @@ struct Node* Addpoly(struct Node* head1, struct Node* head2)
     struct Node* mhead=Addpoly(head1,head2);
     printf("RESULTANT POLYNOMIAL:\n");
     Display(mhead);
- }
- 
+}
