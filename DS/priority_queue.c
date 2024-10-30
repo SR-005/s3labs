@@ -2,11 +2,12 @@
 struct priorityqueue
 {
     int value;
-    int priority
+    int priority;
 };
+
 int main()
 {
-    int max,op,i,j,count;
+    int max,op,i,j,count=0;
     printf("Enter Maximum Size of Queue: ");
     scanf("%d",&max);
     struct priorityqueue queue[max];

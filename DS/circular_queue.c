@@ -1,7 +1,7 @@
 #include<stdio.h>
 int main()
 {
-    int front=-1,rear=-1,op=0,max,i,count;
+    int front=-1,rear=-1,op=0,max,i,count=0;
     printf("Enter Maximum Capacity of queue: ");
     scanf("%d",&max);
     int queue[max];
@@ -16,7 +16,7 @@ int main()
             front=-1;
             rear=-1;
         }
-
+        printf("COUNT: %d\nFRONT: %d\nREAR: %d\n",count,front,rear);
         if(op==1)
         {
             if(count==max)

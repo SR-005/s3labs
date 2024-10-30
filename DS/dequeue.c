@@ -16,7 +16,7 @@ int main()
         printf("\n\n1.INSERT AT FRONT\n2.INSERT AT BACK\n3.DELETE FROM FRONT\n4.DELETE FROM BACK\n5.DISPLAY\n6.EXIT\n");
         printf("CHOOSE AN OPERATION: ");
         scanf("%d",&op);
-
+        printf("COUNT: %d\nFRONT: %d\nREAR: %d\n",count,front,rear);
         if(count==0)
         {
             front=-1;
@@ -27,7 +27,7 @@ int main()
         {
             if(count==max)
             {
-                printf("QUEUE OVERFLOW!!!");
+                printf("QUEUE FULL!!!");
             }
             else
             {
