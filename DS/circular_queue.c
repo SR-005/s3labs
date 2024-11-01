@@ -16,7 +16,6 @@ int main()
             front=-1;
             rear=-1;
         }
-        printf("COUNT: %d\nFRONT: %d\nREAR: %d\n",count,front,rear);
         if(op==1)
         {
             if(count==max)
