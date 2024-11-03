@@ -64,12 +64,12 @@ struct Node* Addpoly(struct Node* head1, struct Node* head2)
     struct Node* cursor1=head1;     //initialize a pointer 'cursor1' pointing to the first Node of POLYNOMIAL1
     struct Node* cursor2=head2;     //initialize a pointer 'cursor2' pointing to the first Node of POLYNOMIAL2
 
-    while(cursor1!=NULL&&cursor2!=NULL)
+    while(cursor1!=NULL&&cursor2!=NULL)         //while both the terms are not over i.e,  both the pointers have not reached the end of the linked list
     {
-        if(cursor1->pow < cursor2->pow)
+        if(cursor1->pow < cursor2->pow)        //if power of term in second polynomial is greater than that of in first polynomial
         {
-            prev->link=cursor2;
-            prev=cursor2;
+            prev->link=cursor2;          //assign the  address of the current node of second polynomial to the link section of the previous node of the result
+            prev=cursor2;               //give the address of current 
             cursor2=cursor2->link;
         }
         else if(cursor1->pow > cursor2->pow)
