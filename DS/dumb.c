@@ -1,124 +1,121 @@
-#include<stdio.h>
-#include<stdlib.h>
-struct Node
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+typedef struct {
+int adj[MAX][MAX];
+int visited[MAX];
+int n;
+}Graph;
+typedef struct {
+int items[MAX];
+int top;
+}Stack;
+typedef struct {
+int items[MAX];
+int front, rear;
+}Queue;
+void initGraph(Graph* g, int n);
+void addEdge(Graph* g, int u, int v);
+void bfs(Graph* g, int start);
+void dfs(Graph* g, int start);
+void push(Stack* s, int value);
+int pop(Stack* s);
+int isEmptyStack(Stack* s);
+void enqueue(Queue* q, int value);
+int dequeue(Queue* q);
+int isEmptyQueue(Queue* q);
+void initGraph(Graph* g, int n) {
+g->n = n;
+for (int i =0; i < n; i++)
 {
-    int coeff;
-    int pow;
-    struct Node* next;
-};
-
-struct Node* createNode(int c, int p)
+g->visited[i] =0;
+for (int j =0; j < n; j++)
 {
-    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
-    newNode -> coeff = c;
-    newNode -> pow = p;
-    newNode -> next = NULL;
-    return newNode;
+g->adj[i][j] =0;
+}}}
+void addEdge(Graph* g, int u, int v) {
+g->adj[u][v] =1;
+g->adj[v][u] =1;
 }
-
-struct Node* multiplyPoly(struct Node* head1, struct Node* head2) 
+void bfs(Graph* g, int start) {
+Queue q;
+q.front = -1;
+q.rear = -1;
+enqueue(&q, start);
+g->visited[start] =1;
+while (!isEmptyQueue(&q)) {
+int current = dequeue(&q);
+printf("%d ", current);
+for (int i =0; i < g->n; i++)
 {
-    struct Node* result = NULL;
-    struct Node* prev = NULL;
-    struct Node* cur1 = head1;
-    while (cur1 != NULL) 
-    {
-        struct Node* cur2 = head2;
-        while (cur2 != NULL) 
-        {
-            int coeff = cur1->coeff * cur2->coeff;
-            int pow = cur1->pow + cur2->pow;
-            struct Node* newNode = createNode(coeff, pow);
-            if (result == NULL) 
-            {
-                result = newNode;
-                prev = newNode;
-            }
-            else 
-            {
-                prev->next = newNode;
-                prev = newNode;
-            }
-            cur2 = cur2->next;
-        }
-        cur1 = cur1->next;
-    }
-    struct Node* temp = result;
-    while (temp != NULL) 
-    {
-        struct Node* next = temp->next;
-        while (next != NULL) 
-        {
-            if (temp->pow == next->pow) 
-            {
-                temp->coeff += next->coeff;
-                struct Node* toFree = next;
-                next = next->next;
-                temp->next = next;
-                free(toFree);
-            } 
-            else 
-            {
-                next = next->next;
-            }
-        }
-        temp = temp->next;
-    }
-    return result;
+if (g->adj[current][i] ==1 && !g->visited[i])
+{
+enqueue(&q, i);
+g->visited[i] =1;
+}}}}
+void dfs(Graph* g, int start) {
+Stack s;
+s.top = -1;
+push(&s, start);
+g->visited[start] =1;
+while(!isEmptyStack(&s)) {
+int current = pop(&s);
+printf("%d ", current);
+for (int i =0; i < g->n; i++)
+{
+if (g->adj[current][i] ==1 && !g->visited[i])
+{
+push(&s, i);
+g->visited[i] =1;
+}}}}
+void push(Stack* s, int value) {
+s->items[++s->top] = value; }
+int pop(Stack* s) {
+return s->items[s->top--]; }
+int isEmptyStack(Stack* s) {
+return s->top == -1;
 }
-
-void display(struct Node* head)
+void enqueue(Queue* q, int value) {
+if (q->rear == MAX -1)
 {
-    struct Node* cur = head;
-    while(cur != NULL)
-    {
-        printf("%dx^%d ", cur->coeff, cur->pow);
-        cur = cur->next;
-        if(cur != NULL)
-        {
-            printf("+ ");
-        }
-    }
-    printf("\n");
+return;
 }
-
-struct Node* getPoly()
+if (q->front ==-1)
 {
-    int n;
-    printf("Enter the no. of terms in the Polynomial: ");
-    scanf("%d", &n);
-    struct Node* head = NULL;
-    struct Node* prev = NULL;
-    for(int i = 0; i < n; i++)
-    {
-        int coeff, pow;
-        printf("\nEnter the coefficient :");
-        scanf("%d", &coeff);
-        printf("Enter the exponent :");
-        scanf("%d", &pow);
-        struct Node* newNode = createNode(coeff, pow);
-        if(head == NULL)
-        {
-            head = newNode;
-        }
-        else
-        {
-            prev->next = newNode;
-        }
-        prev = newNode;
-    }
-    return head;
+q->front =0;
 }
-
-void main()
+q->items[++q->rear] = value; }
+int dequeue(Queue* q) {
+int item = q->items[q->front++];
+if (q->front > q->rear) {
+q->front = q->rear =-1;
+}
+return item; 
+}
+int isEmptyQueue(Queue* q) {
+return q->front ==-1;
+}
+int main() {
+Graph g;
+int v, r, val;
+printf("Enter the no. of vertices :");
+scanf("%d", &v);
+initGraph(&g, v);
+for(int i=1; i<v; i++)
 {
-    printf("Enter the 1st Polynomial \n");
-    struct Node* head1 = getPoly();
-    display(head1);
-    printf("\nEnter the 2nd Polynomial \n");
-    struct Node* head2 = getPoly();
-    display(head2);
-    struct Node* head = multiplyPoly(head1, head2);
-    printf("\nResultant Polynomial :\n");
-    display(head);
+printf("Enter the edge(source) :");
+scanf("%d", &r);
+printf("Enter the destination:");
+scanf("%d", &val);
+addEdge(&g, r, val);
+}
+printf("BFS starting from vertex 0:\n");
+bfs(&g,0);
+for (int i =0;i< g.n; i++)
+{
+g.visited[i]=
+0;
+}
+printf("\nDFS starting from vertex 0:\n");
+dfs(&g,0);
 }
