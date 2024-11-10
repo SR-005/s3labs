@@ -1,6 +1,7 @@
 import java.util.Scanner;
 public class Matrixmultiplication 
 {
+    @SuppressWarnings("ConvertToTryWithResources")
     public static void main(String args[])
     {
         int row1,row2,column1,column2,i,j,k;
@@ -70,5 +71,6 @@ public class Matrixmultiplication
                 System.out.print("\n");
             }
         }
+        sc.close();
     }    
 }

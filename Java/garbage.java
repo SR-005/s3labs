@@ -1,12 +1,20 @@
 public class garbage 
 {
+
+    public garbage() 
+    {
+        System.out.println("Object Created");
+    }
+
+    protected void finalize()
+    {
+        System.out.println("Object Destroyed");
+    }
+    
     public static void main(String args[])
     {
-        Test1 t1=new Test1();
-        Test2 t2=new Test2();
-        t1=null;
+        garbage g=new garbage();
+        g=null;
         System.gc();
-        t2=null();
-
     }    
 }
