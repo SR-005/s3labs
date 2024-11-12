@@ -4,8 +4,12 @@
 void insertionSort(int arr[], int n)
 {
 	int i, key, j;
+    
 	for (i = 1; i < n; i++) 
 	{
+        for (int k = 0; k < n; k++)
+		printf("%d ", arr[k]);
+	    printf("\n");
 		key = arr[i];
 		j = i - 1;
 		while (j >= 0 && arr[j] > key) 
@@ -19,6 +23,7 @@ void insertionSort(int arr[], int n)
 void printArray(int arr[], int n)
 {
 	int i;
+    printf("RESULT: \n");
 	for (i = 0; i < n; i++)
 		printf("%d ", arr[i]);
 	printf("\n");
@@ -35,5 +40,5 @@ int main()
 	}
 	insertionSort(arr, n);
 	printArray(arr, n);
-	return 
+	return 0;
 }

@@ -10,6 +10,9 @@ void selectionSort(int arr[], int n)
 	int i, j, min_idx;
 	for (i = 0; i < n-1; i++)
 	{
+        for (int k=0; k < n; k++)
+		    printf("%d ", arr[k]);
+	    printf("\n");
 		min_idx = i;
 		for (j = i+1; j < n; j++)
 		if (arr[j] < arr[min_idx])
@@ -21,6 +24,7 @@ void selectionSort(int arr[], int n)
 void printArray(int arr[], int size)
 {
 	int i;
+    printf("RESULT: \n");
 	for (i=0; i < size; i++)
 		printf("%d ", arr[i]);
 	printf("\n");
