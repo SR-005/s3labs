@@ -1,164 +1,138 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
-struct Node
-{
-    int data;
-    struct Node* link;
-};
+#define MAX_NODES 100
 
-struct Graph
-{
-    struct Node* alist[100];
-    int tnodes;
-};
+// Adjacency list representation
+int adj[MAX_NODES][MAX_NODES]; // adjacency matrix
+int visited[MAX_NODES]; // visited array
+int n; // number of nodes
 
-struct Stack
-{
-    int items[100];
-    int top;
-};
+// Stack structure for DFS
+int stack[MAX_NODES];
+int top = -1;
 
-struct Queue
-{
-    int items[100];
-    int front,rear;
-};
+// Queue structure for BFS
+int queue[MAX_NODES];
+int front = -1;
+int rear = -1;
 
-struct Graph* newgraph()
-{
-    int nodes,edges,source,destination;
-    struct Graph* graph =  (struct Graph*)malloc(sizeof(struct Graph));
-
-
-    printf("Enter the number of nodes: ");
-    scanf("%d", &nodes);
-    printf("Enter the number of edges: ");
-    scanf("%d", &edges);
-
-    graph->tnodes=nodes;
-    for(int i=0;i<nodes;i++)
-    {
-        graph->alist[i]=NULL;
+// Function to push an element onto the stack
+void push(int value) {
+    if (top < MAX_NODES - 1) {
+        stack[++top] = value;
     }
-
-    printf("Enter the Edges in 'SOURCE DESTINATION' format: \n");
-    for(int i=0;i<edges;i++)
-    {
-        printf("=> ");
-        scanf("%d %d",&source,&destination);
-        struct Node* newnode=(struct Node*)malloc(sizeof(struct Node));
-        newnode->data=destination;
-        newnode->link=graph->alist[source];
-        graph->alist[source]=newnode;
-    }
-    return graph;
 }
 
-void dfs(struct Graph* graph, int start)
-{
-    int visited[100] = {0}; 
-    struct Stack stack; 
-    stack.top=-1;
-    stack.top++;
-    stack.items[stack.top]=start;
+// Function to pop an element from the stack
+int pop() {
+    if (top >= 0) {
+        return stack[top--];
+    }
+    return -1; // Stack underflow
+}
 
-    while (stack.top!=-1)
-    {
-        int node=stack.items[stack.top];
-        stack.top--;
+// Function to enqueue an element in the queue
+void enqueue(int value) {
+    if (rear < MAX_NODES - 1) {
+        if (front == -1) {
+            front = 0;
+        }
+        queue[++rear] = value;
+    }
+}
 
-        if (visited[node] == 0) 
-        {
-            visited[node] = 1; 
-            printf("%d ", node); 
+// Function to dequeue an element from the queue
+int dequeue() {
+    if (front != -1 && front <= rear) {
+        return queue[front++];
+    }
+    return -1; // Queue underflow
+}
 
-            struct Node* temp = graph->alist[node];
-            while (temp!=NULL) 
-            {
-                if (visited[temp->data] == 0) 
-                {
-                    stack.top++;
-                    stack.items[stack.top]=temp->data;
+// Function to perform DFS
+void DFS(int start) {
+    for (int i = 0; i < n; i++) {
+        visited[i] = 0; // Initialize visited array
+    }
+
+    push(start);
+    while (top != -1) {
+        int node = pop();
+        if (!visited[node]) {
+            printf("%d ", node);
+            visited[node] = 1;
+
+            // Push adjacent nodes to stack
+            for (int i = n - 1; i >= 0; i--) { // Reverse order for correct DFS
+                if (adj[node][i] == 1 && !visited[i]) {
+                    push(i);
                 }
-                temp = temp->link; 
             }
         }
     }
     printf("\n");
 }
 
-void bfs(struct Graph* graph, int start)
-{
-    int visited[100] = {0}; 
-    struct Queue queue; 
-    queue.front = 0;
-    queue.rear = -1;
+// Function to perform BFS
+void BFS(int start) {
+    for (int i = 0; i < n; i++) {
+        visited[i] = 0; // Initialize visited array
+    }
 
-    // Start BFS from the 'start' node
-    queue.rear++;
-    queue.items[queue.rear] = start;
+    enqueue(start);
     visited[start] = 1;
 
-    while (queue.front <= queue.rear) 
-    {
-        int node = queue.items[queue.front];
-        queue.front++;
+    while (front != -1 && front <= rear) {
+        int node = dequeue();
         printf("%d ", node);
-        
-        struct Node* temp = graph->alist[node];
-        while (temp != NULL) 
-        {
-            if (visited[temp->data] == 0) 
-            {
-                visited[temp->data] = 1; 
-                queue.rear++;
-                queue.items[queue.rear] = temp->data;
+
+        // Enqueue left child (next node in adjacency list)
+        for (int i = 0; i < n; i++) {
+            if (adj[node][i] == 1 && !visited[i]) {
+                visited[i] = 1;
+                enqueue(i);
             }
-            temp = temp->link; 
         }
     }
     printf("\n");
 }
 
-int main()
-{
-    int choice,start;
-    struct Graph* graph;
-    while(1)
-    {
-        printf("\n1.INSERT\n2.DFS\n3.BFS\n4.EXIT\n");
-        printf("Enter Your Choice: ");
-        scanf("%d",&choice);
+// Function to add an edge to the adjacency list
+void addEdge(int u, int v) {
+    adj[u][v] = 1; // Directed graph
+    adj[v][u] = 1; // Uncomment this line for undirected graph
+}
 
-        if(choice==1)
-        {
-            graph=newgraph();
-        }
+// Main function
+int main() {
+    printf("Enter number of nodes: ");
+    scanf("%d", &n);
 
-        else if(choice==2)
-        {
-            printf("Enter the Starting Node for DFS: ");
-            scanf("%d",&start);
-            dfs(graph,start);
-        }
-        
-        else if(choice==3)
-        {
-            printf("Enter the Starting Node for BFS: ");
-            scanf("%d",&start);
-            bfs(graph,start);
-        }
-        
-        else if(choice==4)
-        {
-            printf("------------EXITING PROGRAM-----------");
-            break;
-        }
-
-        else
-        {
-            printf("INVALID OPERATION!!");
+    // Initialize adjacency matrix
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            adj[i][j] = 0;
         }
     }
+
+    // Input edges
+    int edges;
+    printf("Enter number of edges: ");
+    scanf("%d", &edges);
+    for (int i = 0; i < edges; i++) {
+        int u, v;
+        printf("Enter edge (u v): ");
+        scanf("%d %d", &u, &v);
+        addEdge(u, v);
+    }
+
+    // Perform DFS and BFS
+    printf("DFS Traversal: ");
+    DFS(0); // Starting from node 0
+
+    printf("BFS Traversal: ");
+    BFS(0); // Starting from node 0
+
+    return 0;
 }
