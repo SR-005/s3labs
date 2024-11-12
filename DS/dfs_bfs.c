@@ -3,7 +3,7 @@
 
 #define MAX_NODES 100
 
-// Adjacency list representation
+// Adjacency matrix representation
 int adj[MAX_NODES][MAX_NODES]; // adjacency matrix
 int visited[MAX_NODES]; // visited array
 int n; // number of nodes
@@ -63,7 +63,7 @@ void DFS(int start) {
             printf("%d ", node);
             visited[node] = 1;
 
-            // Push adjacent nodes to stack
+            // Push adjacent nodes to stack (right child first for correct DFS)
             for (int i = n - 1; i >= 0; i--) { // Reverse order for correct DFS
                 if (adj[node][i] == 1 && !visited[i]) {
                     push(i);
@@ -87,7 +87,7 @@ void BFS(int start) {
         int node = dequeue();
         printf("%d ", node);
 
-        // Enqueue left child (next node in adjacency list)
+        // Enqueue adjacent nodes (left child first)
         for (int i = 0; i < n; i++) {
             if (adj[node][i] == 1 && !visited[i]) {
                 visited[i] = 1;
@@ -98,10 +98,12 @@ void BFS(int start) {
     printf("\n");
 }
 
-// Function to add an edge to the adjacency list
+// Function to add an edge to the adjacency matrix
 void addEdge(int u, int v) {
-    adj[u][v] = 1; // Directed graph
-    adj[v][u] = 1; // Uncomment this line for undirected graph
+    if (u < MAX_NODES && v < MAX_NODES) {
+        adj[u][v] = 1; // Directed graph
+        adj[v][u] = 1; // Uncomment this line for undirected graph
+    }
 }
 
 // Main function
@@ -120,19 +122,23 @@ int main() {
     int edges;
     printf("Enter number of edges: ");
     scanf("%d", &edges);
+    int firstNode = -1; // To store the first entered node
     for (int i = 0; i < edges; i++) {
         int u, v;
         printf("Enter edge (u v): ");
         scanf("%d %d", &u, &v);
-        addEdge(u, v);
+        addEdge(u, v); // Add the edge
+        if (firstNode == -1) {
+            firstNode = u; // Store the first entered node
+        }
     }
 
-    // Perform DFS and BFS
+    // Perform DFS and BFS starting from the first entered node
     printf("DFS Traversal: ");
-    DFS(0); // Starting from node 0
+    DFS(firstNode); // Starting from the first entered node
 
-    printf("BFS Traversal: ");
-    BFS(0); // Starting from node 0
+    printf ("BFS Traversal: ");
+    BFS(firstNode); // Starting from the first entered node
 
     return 0;
 }
