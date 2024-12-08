@@ -72,16 +72,16 @@ int main()
     p2count=degree2-1;
     printf("\np1count: %d\n",p1count);
     printf("p2count: %d",p2count);
+    
     //maxdegree=degree1+degree2;
-    //if(degree1>degree2)
-    //{
-    //    maxdegree=degree1;
-    //}
-    //else
-    //{
-    //    maxdegree=degree2;
-    //}
-    maxdegree=4;
+    if(degree1>degree2)
+    {
+        maxdegree=degree1;
+    }
+    else
+    {
+        maxdegree=degree2;
+    }
     struct Polynomial3 p3[maxdegree];
 
     //adding POLYNOMIAL 1 and POLYNOMIAL 2
@@ -136,7 +136,14 @@ int main()
     printf("\nRESULTANT POLYNOMIAL: ");
     for(i=0;i<=maxdegree;i++)
     {
-        printf("%dx^",p3[i].coefficient);
-        printf("%d ",p3[i].exponent);
+        if(p3[i].coefficient==0)
+        {
+            continue;
+        }
+        else
+        {
+            printf("%dx^",p3[i].coefficient);
+            printf("%d ",p3[i].exponent);
+        }
     }
 }
