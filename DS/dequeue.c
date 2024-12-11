@@ -83,7 +83,7 @@ int main()
             }
             else
             {
-                queue[front=0];
+                queue[front]=0;
                 if(front==max-1)
                 {
                     front=0;
